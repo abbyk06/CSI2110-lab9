@@ -19,6 +19,7 @@
 // Modified Lachlan Plant 2015/11/18
 //
 // ==========================================================================
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStreamReader;
@@ -114,18 +115,18 @@ public class SimpleGraph {
 	
   private void DFS(Graph<String,String> graph, Vertex<String> v ) {
     /***** please implement depth-first search here ************/
-    if (!visited.get(v).equals(null)) {
+    if (visited.get(v.getElement())!= null) {
       return;
     }
+    visited.put(v.getElement(), Boolean.TRUE);
+    startVisit(v);
     
-    if (visited.get(v).equals(true)) {
-      startVisit(v);
-    }
     for (Edge<String> e: graph.outgoingEdges(v)){
       Vertex<String> s = graph.opposite(v,e);
       DFS(graph,s);
     }
     finishVisit(v);
+    return;
   }
   
   private void startVisit( Vertex<String> v ) {
