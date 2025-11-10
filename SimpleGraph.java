@@ -7,9 +7,9 @@
 //   SITE, University of Ottawa
 //   800 King Edward Ave.
 //   Ottawa, On., K1N 6N5
-//   Canada. 
+//   Canada.
 //   http://www.site.uottawa.ca
-// 
+//
 // Creator: jlang (Jochen Lang)
 // Email:   jlang@site.uottawa.ca
 // ==========================================================================
@@ -21,11 +21,8 @@
 // ==========================================================================
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.StringTokenizer;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import java.util.Iterator;
-
 import java.util.*;
 import net.datastructures.Graph;
 import net.datastructures.Vertex;
@@ -35,13 +32,13 @@ import net.datastructures.Map;
 
 
 public class SimpleGraph {
-  Graph<String,String> sGraph;  
+  Graph<String,String> sGraph;
   
 
-  /** 
+  /**
    * Create a SimpleGraph from file
    */
-  public SimpleGraph( String fileName ) 
+  public SimpleGraph( String fileName )
     throws Exception, IOException {
     sGraph = new AdjacencyMapGraph<String,String>(false);
     read( fileName );
@@ -51,40 +48,41 @@ public class SimpleGraph {
   /**
    * Read a list of edges from file
    */
-  protected void read( String fileName ) 
+  protected void read( String fileName )
     throws Exception, IOException {
-    BufferedReader graphFile = 
+    BufferedReader graphFile =
       new BufferedReader( new FileReader(fileName));
     
     Hashtable<String,Vertex> vertices = new Hashtable<String, Vertex>();
     // Create a hash map to store all the vertices read
+  
   
     
     // Read the edges and insert
     String line;
     while( ( line = graphFile.readLine( ) ) != null ) {
       StringTokenizer st = new StringTokenizer( line );
-      if( st.countTokens() != 2 ) 
-	throw new IOException("Incorrect input file at line " 
-				    + line );
+      if( st.countTokens() != 2 )
+	throw new IOException("Incorrect input file at line "
+				  + line );
       String source = st.nextToken( );
       String dest = st.nextToken( );
       Vertex<String> sv = vertices.get( source );
       if ( sv == null ) {
 	// Source vertex not in graph -- insert
-	sv = sGraph.insertVertex(source); 
+	sv = sGraph.insertVertex(source);
 	vertices.put( source, sv );
-      } 
+      }
       Vertex<String> dv = vertices.get( dest );
       if ( dv == null ) {
 	// Destination vertex not in graph -- insert
-	dv = sGraph.insertVertex(dest); 
+	dv = sGraph.insertVertex(dest);
 	vertices.put( dest, dv );
       }
       // check if edge is already in graph
       if ( sGraph.getEdge( sv, dv )==null) {
-	// edge not in graph -- add 
-	sGraph.insertEdge(sv, dv, source + " to " + dest ); 
+	// edge not in graph -- add
+	sGraph.insertEdge(sv, dv, source + " to " + dest );
       }
     }
   }
@@ -115,10 +113,19 @@ public class SimpleGraph {
 	
 	
   private void DFS(Graph<String,String> graph, Vertex<String> v ) {
-	  
     /***** please implement depth-first search here ************/
-	  
-    return;
+    if (!visited.get(v).equals(null)) {
+      return;
+    }
+    
+    if (visited.get(v).equals(true)) {
+      startVisit(v);
+    }
+    for (Edge<String> e: graph.outgoingEdges(v)){
+      Vertex<String> s = graph.opposite(v,e);
+      DFS(graph,s);
+    }
+    finishVisit(v);
   }
   
   private void startVisit( Vertex<String> v ) {
@@ -133,8 +140,8 @@ public class SimpleGraph {
    * the edges
    */
   void print() {
-    System.out.println( "Vertices: " + sGraph.numVertices() + 
-			" Edges: " + sGraph.numEdges()); 
+    System.out.println( "Vertices: " + sGraph.numVertices() +
+			" Edges: " + sGraph.numEdges());
     
     for( Vertex<String> vs : sGraph.vertices() ) {
       System.out.println( vs.getElement() );
@@ -151,7 +158,7 @@ public class SimpleGraph {
    */
   public static String readVertex() throws IOException {
     System.out.print( "[Input] Vertex: " );
-    BufferedReader reader = 
+    BufferedReader reader =
       new BufferedReader(new InputStreamReader ( System.in ));
     return reader.readLine();
   }
